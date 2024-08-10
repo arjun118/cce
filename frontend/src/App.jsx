@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 import "./App.css";
 import Register from "./components/auth/Register";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -11,6 +10,7 @@ import Home from "./components/Home";
 import Users from "./components/Users";
 import PersistLogin from "./components/auth/PersistLogin";
 import Test from "./components/chat/Test";
+import Room from "./components/chat/Room";
 function App() {
   const [count, setCount] = useState(0);
 
@@ -20,6 +20,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Layout />}>
             {/* public routes */}
+            <Route path="/room" element={<Room />} />
             <Route path="/test" element={<Test />} />
             <Route element={<PersistLogin />}>
               <Route path="/auth/signup" element={<Register />} />
