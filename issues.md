@@ -1,0 +1,3 @@
+- Room functionality is partially achived
+- the problem, when you refresh the tab after joining the room, you are not again connected to the same room, and the code and language will also be rest
+- try storing that in local storage for now, the code and language and while refresh let the users join the room with the roomid in localstorage and also set the code then

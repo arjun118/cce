@@ -30,12 +30,29 @@ app.use("/users", userRouter);
 
 io.on("connection", (socket) => {
   console.log("a user is connected");
-  socket.on("from_client", (data) => {
-    socket.broadcast.emit("some_user", data);
+  socket.on("set_code_client", (data) => {
+    console.log("set code from client is received");
+    const { message, roomid } = data;
+    console.log(data);
+    // socket.broadcast.emit("set_code_server", data);
+    socket.to(roomid).emit("set_code_server", message);
   });
 
-  socket.on("change_language", (data) => {
-    socket.broadcast.emit("set_language", data);
+  socket.on("change_language_client", (data) => {
+    const { message, roomid } = data;
+    // socket.broadcast.emit("set_language", data);
+    socket.to(roomid).emit("change_language_server", message);
+  });
+
+  socket.on("create_new_room", (data) => {
+    console.log("roomid new one:", data);
+    socket.join(data); // user joined this room
+  });
+
+  socket.on("join_existing_room", (data) => {
+    console.log("roomid join one:", data);
+    socket.join(data); //join the existing room
+    socket.to(data).emit("new user joined");
   });
 });
 
