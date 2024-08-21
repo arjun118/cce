@@ -20,8 +20,6 @@ function App() {
         <Routes>
           <Route path="/" element={<Layout />}>
             {/* public routes */}
-            <Route path="/room" element={<Room />} />
-            <Route path="/test" element={<Test />} />
             <Route element={<PersistLogin />}>
               <Route path="/auth/signup" element={<Register />} />
               <Route path="/auth/login" element={<Login />} />
@@ -31,6 +29,8 @@ function App() {
               <Route element={<RequireAuth />}>
                 <Route path="/home" element={<Home />} />
                 <Route path="/users" element={<Users />} />
+                <Route path="/room" element={<Room />} />
+                <Route path="/test" element={<Test />} />
               </Route>
             </Route>
 

@@ -35,13 +35,13 @@ io.on("connection", (socket) => {
     const { message, roomid } = data;
     console.log(data);
     // socket.broadcast.emit("set_code_server", data);
-    socket.to(roomid).emit("set_code_server", message);
+    io.to(roomid).emit("set_code_server", message);
   });
 
   socket.on("change_language_client", (data) => {
     const { message, roomid } = data;
     // socket.broadcast.emit("set_language", data);
-    socket.to(roomid).emit("change_language_server", message);
+    io.to(roomid).emit("change_language_server", message);
   });
 
   socket.on("create_new_room", (data) => {
@@ -50,9 +50,11 @@ io.on("connection", (socket) => {
   });
 
   socket.on("join_existing_room", (data) => {
-    console.log("roomid join one:", data);
-    socket.join(data); //join the existing room
-    socket.to(data).emit("new user joined");
+    if (!socket.rooms.has(data)) {
+      console.log("roomid join one:", data);
+      socket.join(data); //join the existing room
+      socket.to(data).emit("new user joined");
+    }
   });
 });
 
