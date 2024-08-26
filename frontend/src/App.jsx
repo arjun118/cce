@@ -9,7 +9,7 @@ import RequireAuth from "./components/auth/RequireAuth";
 import Home from "./components/Home";
 import Users from "./components/Users";
 import PersistLogin from "./components/auth/PersistLogin";
-import Test from "./components/chat/Test";
+import EditorComponent from "./components/chat/EditorComponent";
 import Room from "./components/chat/Room";
 function App() {
   const [count, setCount] = useState(0);
@@ -30,7 +30,7 @@ function App() {
                 <Route path="/home" element={<Home />} />
                 <Route path="/users" element={<Users />} />
                 <Route path="/room" element={<Room />} />
-                <Route path="/test" element={<Test />} />
+                <Route path="/editor" element={<EditorComponent />} />
               </Route>
             </Route>
 

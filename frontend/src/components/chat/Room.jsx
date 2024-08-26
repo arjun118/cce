@@ -26,14 +26,14 @@ const Room = () => {
     socket.emit("join_existing_room", id);
     setAuth((prev) => ({ ...prev, roomid: joinRoomDetails.roomId }));
     localStorage.setItem("roomid", id);
-    navigate("/test");
+    navigate("/editor");
   };
   const createRoom = () => {
     const id = newRoomDetails.roomId;
     socket.emit("create_new_room", id); //tell backend to create a room and let this user join that room
     setAuth((prev) => ({ ...prev, roomid: newRoomDetails.roomId }));
     localStorage.setItem("roomid", id);
-    navigate("/test");
+    navigate("/editor");
   };
 
   useEffect(() => {

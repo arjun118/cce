@@ -56,6 +56,11 @@ io.on("connection", (socket) => {
       socket.to(data).emit("new user joined");
     }
   });
+
+  socket.on("new_message_client", (data) => {
+    const { message, roomid } = data;
+    io.to(roomid).emit("new_message_server", message);
+  });
 });
 
 app.use((err, req, res, next) => {

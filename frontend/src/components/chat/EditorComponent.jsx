@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { socket, io } from "../../socket";
-import { Button, Textarea } from "@chakra-ui/react";
+import { Button, HStack, Input, Textarea, VStack } from "@chakra-ui/react";
 import Editor from "@monaco-editor/react";
 import { useRef } from "react";
 import { Select } from "@chakra-ui/react";
 import useAuth from "../../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
-const Test = () => {
+import { Navigate, useNavigate } from "react-router-dom";
+const EditorComponent = () => {
+  const [message, setMessage] = useState("somethning");
+  const [messageList, setMessageList] = useState([]);
   const navigate = useNavigate();
   const { auth, setAuth } = useAuth();
   const editorRef = useRef(null);
@@ -44,11 +46,20 @@ const Test = () => {
       setSelectedLanguage(data);
       localStorage.setItem("language", data);
     });
+    socket.on("new_message_server", (data) => {
+      setMessageList((prev) => [...prev, data]);
+    });
+
+    if (!storedRoomId) {
+      navigate("/room");
+    }
     return () => {
       socket.off("set_code_server");
       socket.off("change_language_server");
+      socket.off("new_message_server");
     };
   }, []);
+
   const handleChange = (e) => {
     let content = e;
     setCode(content);
@@ -58,7 +69,7 @@ const Test = () => {
   return (
     <>
       {auth?.roomid ? (
-        <>
+        <HStack>
           <Select
             onChange={(e) => {
               setSelectedLanguage(e.target.value);
@@ -95,12 +106,42 @@ const Test = () => {
               language={selectedLanguage}
             />
           </div>
-        </>
-      ) : (
-        navigate("/room")
-      )}
+
+          <VStack>
+            {/* this one is for the live chat in the room */}
+
+            {messageList?.length > 0 ? (
+              <ul>
+                {messageList.map((message, indx) => {
+                  return <li key={indx}>{message}</li>;
+                })}
+              </ul>
+            ) : (
+              <p>no messages </p>
+            )}
+
+            <Input
+              size="lg"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+            />
+            <Button
+              onClick={() =>
+                // sent the event to all the people in the room
+                // then add the message to the chat area
+                {
+                  socket.emit("new_message_client", {
+                    message: message,
+                    roomid: auth.roomid,
+                  });
+                }
+              }
+            ></Button>
+          </VStack>
+        </HStack>
+      ) : null}
     </>
   );
 };
 
-export default Test;
+export default EditorComponent;
